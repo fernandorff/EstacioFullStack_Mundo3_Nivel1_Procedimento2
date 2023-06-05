@@ -1,4 +1,4 @@
-![img_1.png](img_1.png)
+![image](https://github.com/fernandorff/EstacioFullStack_Mundo3_Nivel1_Procedimento2/assets/101672271/842e78d5-d842-4a49-92e6-48a201ca8c5e)
 
 ## Centro Universitário Estácio do Ceará - Campus Centro
 

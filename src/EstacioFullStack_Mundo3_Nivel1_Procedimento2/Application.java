@@ -377,7 +377,4 @@ public class Application {
 
         scanner.close();
     }
-
-
 }
-

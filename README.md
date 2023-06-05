@@ -1,4 +1,4 @@
-![image](https://github.com/fernandorff/EstacioFullStack_Mundo3_Nivel1_Procedimento1/assets/101672271/0af36516-6d72-49f7-9e09-03b185642c8e)
+![img_1.png](img_1.png)
 
 ## Centro Universitário Estácio do Ceará - Campus Centro
 
@@ -12,7 +12,7 @@
 
 #### Integrantes: Fernando Rocha Fonteles Filho
 
-#### Repositorio Git: https://github.com/fernandorff/EstacioFullStack_Mundo3_Nivel1_Procedimento1
+#### Repositorio Git: https://github.com/fernandorff/EstacioFullStack_Mundo3_Nivel1_Procedimento2
 
 ##
 
@@ -32,267 +32,6 @@
 
 ###
 
-- Classe Pessoa (Entidade)
-
-```
-package EstacioFullStack_Mundo3_Nivel1_Procedimento2.model;
-
-import java.io.Serializable;
-
-public class Pessoa implements Serializable {
-    private int id;
-    private String nome;
-
-    public Pessoa() {}
-
-    public Pessoa(int id, String nome) {
-        this.id = id;
-        this.nome = nome;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void exibir() {
-        System.out.println("ID: " + id);
-        System.out.println("Nome: " + nome);
-    }
-}
-```
-
-###
-
-- Classe PessoaFisica (Entidade)
-
-```
-package EstacioFullStack_Mundo3_Nivel1_Procedimento2.model;
-
-import java.io.Serializable;
-
-public class PessoaFisica extends Pessoa implements Serializable {
-    private String cpf;
-    private int idade;
-
-    public PessoaFisica() {}
-
-    public PessoaFisica(int id, String nome, String cpf, int idade) {
-        super(id, nome);
-        this.cpf = cpf;
-        this.idade = idade;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public int getIdade() {
-        return idade;
-    }
-
-    public void setIdade(int idade) {
-        this.idade = idade;
-    }
-
-    @Override
-    public void exibir() {
-        super.exibir();
-        System.out.println("CPF: " + cpf);
-        System.out.println("Idade: " + idade);
-    }
-}
-```
-
-###
-
-- Classe PessoaJuridica (Entidade)
-
-```
-package EstacioFullStack_Mundo3_Nivel1_Procedimento2.model;
-
-import java.io.Serializable;
-
-public class PessoaJuridica extends Pessoa implements Serializable {
-    private String cnpj;
-
-    public PessoaJuridica() {}
-
-    public PessoaJuridica(int id, String nome, String cnpj) {
-        super(id, nome);
-        this.cnpj = cnpj;
-    }
-
-    public String getCnpj() {
-        return cnpj;
-    }
-
-    public void setCnpj(String cnpj){
-        this.cnpj = cnpj;
-    }
-
-    @Override
-    public void exibir() {
-        super.exibir();
-        System.out.println("CNPJ: " + cnpj);
-    }
-}
-```
-
-###
-
-- Classe PessoaFisicaRepo (Gerenciador)
-
-```
-package EstacioFullStack_Mundo3_Nivel1_Procedimento2.model.gerenciadores;
-
-import EstacioFullStack_Mundo3_Nivel1_Procedimento2.model.PessoaFisica;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
-public class PessoaFisicaRepo {
-    private ArrayList<PessoaFisica> pessoasFisicas;
-
-    public PessoaFisicaRepo() {
-        pessoasFisicas = new ArrayList<>();
-    }
-
-    public void inserir(PessoaFisica pessoaFisica) {
-        pessoasFisicas.add(pessoaFisica);
-    }
-
-    public void alterar(PessoaFisica pessoaFisica, String novoNome, String novoCpf, int novaIdade) {
-        pessoaFisica.setNome(novoNome);
-        pessoaFisica.setCpf(novoCpf);
-        pessoaFisica.setIdade(novaIdade);
-    }
-
-    public void excluir(int id) {
-        pessoasFisicas.remove(obter(id));
-    }
-
-    public PessoaFisica obter(int id) throws NoSuchElementException {
-        Optional<PessoaFisica> pessoaFisicaEncontrada = pessoasFisicas.stream().
-                filter(pessoaFisica -> pessoaFisica.getId() == id)
-                .findFirst();
-
-        if (pessoaFisicaEncontrada.isPresent()) {
-            return pessoaFisicaEncontrada.get();
-        } else {
-            throw new NoSuchElementException("Pessoa física com ID " + id + " não encontrada.");
-        }
-    }
-
-    public ArrayList<PessoaFisica> obterTodos() {
-        return pessoasFisicas;
-    }
-
-    public void persistir(String nomeArquivo) throws IOException {
-        ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(nomeArquivo));
-        outputStream.writeObject(pessoasFisicas);
-        outputStream.close();
-        System.out.println("Dados da pessoa física armazenados.");
-        System.out.println();
-    }
-
-    public void recuperar(String nomeArquivo) throws IOException, ClassNotFoundException {
-        ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(nomeArquivo));
-        pessoasFisicas = (ArrayList<PessoaFisica>) inputStream.readObject();
-        inputStream.close();
-        System.out.println("Dados da pessoa física recuperados.");
-        System.out.println();
-    }
-}
-```
-
-###
-
-- Classe PessoaJuridicaRepo (Gerenciador)
-
-```
-package EstacioFullStack_Mundo3_Nivel1_Procedimento2.model.gerenciadores;
-
-import EstacioFullStack_Mundo3_Nivel1_Procedimento2.model.PessoaJuridica;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
-public class PessoaJuridicaRepo {
-    private ArrayList<PessoaJuridica> pessoasJuridicas;
-
-    public PessoaJuridicaRepo() {
-        pessoasJuridicas = new ArrayList<>();
-    }
-
-    public void inserir(PessoaJuridica pessoaJuridica) {
-        pessoasJuridicas.add(pessoaJuridica);
-    }
-
-    public void alterar(PessoaJuridica pessoaJuridica, String novoNome, String novoCpf) {
-        pessoaJuridica.setNome(novoNome);
-        pessoaJuridica.setCnpj(novoCpf);
-    }
-
-    public void excluir(int id) {
-        pessoasJuridicas.remove(obter(id));
-    }
-
-    public PessoaJuridica obter(int id) throws NoSuchElementException {
-        Optional<PessoaJuridica> pessoaJuridicaEncontrada = pessoasJuridicas.stream().
-                filter(pessoaJuridica -> pessoaJuridica.getId() == id)
-                .findFirst();
-
-        if (pessoaJuridicaEncontrada.isPresent()) {
-            return pessoaJuridicaEncontrada.get();
-        } else {
-            throw new NoSuchElementException("Pessoa jurídica com ID " + id + " não encontrada.");
-        }
-    }
-
-    public ArrayList<PessoaJuridica> obterTodos() {
-        return pessoasJuridicas;
-    }
-
-    public void persistir(String nomeArquivo) throws IOException {
-        ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(nomeArquivo));
-        outputStream.writeObject(pessoasJuridicas);
-        outputStream.close();
-        System.out.println("Dados da pessoa jurídica armazenados.");
-        System.out.println();
-    }
-
-    public void recuperar(String nomeArquivo) throws IOException, ClassNotFoundException {
-        ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(nomeArquivo));
-        pessoasJuridicas = (ArrayList<PessoaJuridica>) inputStream.readObject();
-        inputStream.close();
-        System.out.println("Dados da pessoa jurídica recuperados.");
-        System.out.println();
-    }
-}
-```
-
-###
-
 - Classe Application (Aplicação)
 
 ```
@@ -304,93 +43,555 @@ import EstacioFullStack_Mundo3_Nivel1_Procedimento2.model.gerenciadores.PessoaFi
 import EstacioFullStack_Mundo3_Nivel1_Procedimento2.model.gerenciadores.PessoaJuridicaRepo;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Application {
 
+    public static void clearConsole() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+            }
+        } catch (Exception e) {
+        }
+    }
+
     public static void main(String[] args) {
 
-        PessoaFisicaRepo pessoaFisicaRepo1 = new PessoaFisicaRepo();
+        PessoaFisicaRepo pessoaFisicaRepo = new PessoaFisicaRepo();
+        PessoaJuridicaRepo pessoaJuridicaRepo = new PessoaJuridicaRepo();
 
-        PessoaFisica pessoaFisica1 = new PessoaFisica(1, "John", "11111111111", 30);
-        PessoaFisica pessoaFisica2 = new PessoaFisica(2, "Mary", "22222222222", 25);
-        pessoaFisicaRepo1.inserir(pessoaFisica1);
-        pessoaFisicaRepo1.inserir(pessoaFisica2);
+        Scanner scanner = new Scanner(System.in);
+        String opcaoSelecionada;
 
-        try {
-            pessoaFisicaRepo1.persistir("pessoas_fisicas.dat");
+        do {
+            System.out.println("==============================");
+            System.out.println("1 - Incluir Pessoa");
+            System.out.println("2 - Alterar Pessoa");
+            System.out.println("3 - Excluir Pessoa");
+            System.out.println("4 - Buscar pelo Id");
+            System.out.println("5 - Exibir Todos");
+            System.out.println("6 - Persistir Dados");
+            System.out.println("7 - Recuperar Dados");
+            System.out.println("0 - Finalizar Programa");
+            System.out.println("==============================");
 
-            PessoaFisicaRepo pessoaFisicaRepo2 = new PessoaFisicaRepo();
-            pessoaFisicaRepo2.recuperar("pessoas_fisicas.dat");
+            opcaoSelecionada = scanner.next();
 
-            pessoaFisicaRepo2.obterTodos()
-                    .forEach(pessoaFisica -> {
-                        pessoaFisica.exibir();
-                        System.out.println();
-                    });
+            switch (opcaoSelecionada) {
 
-        } catch (IOException | ClassNotFoundException erro) {
-            System.out.println("Erro ao persistir ou recuperar os dados: " + erro.getMessage());
-        }
+                // INSERIR PESSOA
+                case "1":
+                    do {
+                        System.out.println("==============================");
+                        System.out.println("F - Incluir Pessoa Física");
+                        System.out.println("J - Incluir Pessoa Jurídica");
+                        System.out.println("Q - Voltar ao Menu Principal");
+                        System.out.println("==============================");
 
-        PessoaJuridicaRepo pessoaJuridicaRepo1 = new PessoaJuridicaRepo();
+                        opcaoSelecionada = scanner.next();
+                        scanner.nextLine();
 
-        PessoaJuridica pessoaJuridica1 = new PessoaJuridica(1, "X Corp", "1231231230");
-        PessoaJuridica pessoaJuridica2 = new PessoaJuridica(2, "Acme LTDA", "4564564560");
-        pessoaJuridicaRepo1.inserir(pessoaJuridica1);
-        pessoaJuridicaRepo1.inserir(pessoaJuridica2);
+                        switch (opcaoSelecionada.toUpperCase()) {
 
-        try {
-            pessoaJuridicaRepo1.persistir("pessoas_juridicas.dat");
+                            // Inserir pessoa fisica
+                            case "F":
+                                System.out.println("Insira o nome da pessoa física: ");
+                                String nome = scanner.nextLine();
+                                System.out.println("Insira o cpf da pessoa física: ");
+                                String cpf = scanner.nextLine();
+                                System.out.println("Insira a idade da pessoa física: ");
+                                int idade = scanner.nextInt();
 
-            PessoaJuridicaRepo pessoaJuridicaRepo2 = new PessoaJuridicaRepo();
-            pessoaJuridicaRepo2.recuperar("pessoas_juridicas.dat");
+                                int pessoaFisicaTamanhoRepo = pessoaFisicaRepo.obterTodos().size();
+                                int pessoaFisicaIdSerie = pessoaFisicaTamanhoRepo > 0 ? pessoaFisicaRepo.obterTodos()
+                                        .get(pessoaFisicaTamanhoRepo - 1).getId() + 1 : 1;
 
-            pessoaJuridicaRepo2.obterTodos().stream()
-                    .forEach(pessoaJuridica -> {
-                        pessoaJuridica.exibir();
-                        System.out.println();
-                    });
+                                PessoaFisica pessoaFisica = new PessoaFisica(pessoaFisicaIdSerie, nome, cpf, idade);
 
-        } catch (IOException | ClassNotFoundException erro) {
-            System.out.println("Erro ao persistir ou recuperar os dados: " + erro.getMessage());
-        }
+                                pessoaFisicaRepo.inserir(pessoaFisica);
+
+                                System.out.println("Pessoa física inserida com sucesso!");
+                                pessoaFisica.exibir();
+                                break;
+
+                            // Inserir pessoa juridica
+                            case "J":
+                                System.out.println("Insira o nome da pessoa juridica: ");
+                                nome = scanner.nextLine();
+                                System.out.println("Insira o cnpj da pessoa juridica: ");
+                                String cnpj = scanner.nextLine();
+
+                                int pessoaJuridicaTamanhoRepo = pessoaJuridicaRepo.obterTodos().size();
+                                int pessoaJuridicaIdSerie = pessoaJuridicaTamanhoRepo > 0 ? pessoaJuridicaRepo.obterTodos()
+                                        .get(pessoaJuridicaTamanhoRepo - 1).getId() + 1 : 1;
+
+                                PessoaJuridica pessoaJuridica = new PessoaJuridica(pessoaJuridicaIdSerie, nome, cnpj);
+
+                                pessoaJuridicaRepo.inserir(pessoaJuridica);
+
+                                System.out.println("Pessoa juridica inserida com sucesso!");
+                                pessoaJuridica.exibir();
+                                break;
+
+                            // Opcao invalida
+                            default:
+                                System.out.println("Opção inválida. Por favor, selecione uma opção válida.");
+                                break;
+                        }
+
+                        // Voltar para o menu principal
+                    } while (!opcaoSelecionada.equalsIgnoreCase("Q"));
+                    break;
+
+                // ALTERAR PESSOA
+                case "2":
+                    do {
+                        System.out.println("==============================");
+                        System.out.println("F - Alterar pessoa física por ID");
+                        System.out.println("J - Alterar pessoa juridica por ID");
+                        System.out.println("Q - Voltar ao Menu Principal");
+                        System.out.println("==============================");
+
+                        opcaoSelecionada = scanner.next();
+                        scanner.nextLine();
+
+                        switch (opcaoSelecionada.toUpperCase()) {
+
+                            // Alterando pessoa fisica
+                            case "F":
+                                System.out.println("Insira o ID da pessoa física: ");
+                                int idPessoaFisica = scanner.nextInt();
+                                scanner.nextLine();
+
+                                PessoaFisica pessoaFisicaObtida = pessoaFisicaRepo.obter(idPessoaFisica);
+
+                                if (pessoaFisicaObtida != null) {
+                                    pessoaFisicaObtida.exibir();
+
+                                    System.out.println("Nome atual da pessoa física: " + pessoaFisicaObtida.getNome());
+                                    System.out.println("Insira um novo nome: ");
+                                    String novoNome = scanner.nextLine();
+
+                                    System.out.println("CPF atual da pessoa física: " + pessoaFisicaObtida.getCpf());
+                                    System.out.println("Insira um novo CPF: ");
+                                    String novoCPF = scanner.nextLine();
+
+                                    System.out.println("Idade atual da pessoa física: " + pessoaFisicaObtida.getCpf());
+                                    System.out.println("Insira uma nova Idade: ");
+                                    int novaIdade = scanner.nextInt();
+
+                                    pessoaFisicaRepo.alterar(pessoaFisicaObtida, novoNome, novoCPF, novaIdade);
+
+                                    System.out.println("Pessoa fìsica alterada com sucesso!");
+                                } else
+                                    System.out.println("Pessoa física com este ID não foi encontrada! Tente novamente.");
+                                break;
+
+                            // Alterando pessoa juridica
+                            case "J":
+                                System.out.println("Insira o ID da pessoa juridica: ");
+                                int idPessoaJuridica = scanner.nextInt();
+                                scanner.nextLine();
+
+                                PessoaJuridica pessoaJuridicaObtida = pessoaJuridicaRepo.obter(idPessoaJuridica);
+
+                                if (pessoaJuridicaObtida != null) {
+                                    pessoaJuridicaObtida.exibir();
+
+                                    System.out.println("Nome atual da pessoa juridica: " + pessoaJuridicaObtida.getNome());
+                                    System.out.println("Insira um novo nome: ");
+                                    String novoNome = scanner.nextLine();
+
+                                    System.out.println("CNPJ atual da pessoa juridica: " + pessoaJuridicaObtida.getCnpj());
+                                    System.out.println("Insira um novo CNPJ: ");
+                                    String novoCNPJ = scanner.nextLine();
+
+                                    pessoaJuridicaRepo.alterar(pessoaJuridicaObtida, novoNome, novoCNPJ);
+
+                                    System.out.println("Pessoa juridica alterada com sucesso!");
+                                } else
+                                    System.out.println("Pessoa juridica com este ID não foi encontrada! Tente novamente.");
+                                break;
+
+                            // Opcao invalida
+                            default:
+                                System.out.println("Opção inválida. Por favor, selecione uma opção válida.");
+                                break;
+                        }
+
+                        // Voltar para o menu principal
+                    } while (!opcaoSelecionada.equalsIgnoreCase("Q"));
+                    break;
+
+                // EXCLUIR PESSOA
+                case "3":
+                    do {
+                        System.out.println("==============================");
+                        System.out.println("F - Excluir pessoa física por ID");
+                        System.out.println("J - Excluir pessoa juridica por ID");
+                        System.out.println("Q - Voltar ao Menu Principal");
+                        System.out.println("==============================");
+
+                        opcaoSelecionada = scanner.next();
+                        scanner.nextLine();
+
+                        switch (opcaoSelecionada.toUpperCase()) {
+
+                            // Excluindo pessoa fisica
+                            case "F":
+                                System.out.println("Insira o ID da pessoa física: ");
+                                int idPessoaFisica = scanner.nextInt();
+
+                                PessoaFisica pessoaFisicaObtida = pessoaFisicaRepo.obter(idPessoaFisica);
+
+                                if (pessoaFisicaObtida != null) {
+                                    pessoaFisicaObtida.exibir();
+
+                                    pessoaFisicaRepo.excluir(idPessoaFisica);
+
+                                    System.out.println("Pessoa fìsica excluida com sucesso!");
+                                } else
+                                    System.out.println("Pessoa física com este ID não foi encontrada! Tente novamente.");
+                                break;
+
+                            // Excluindo pessoa juridica
+                            case "J":
+                                System.out.println("Insira o ID da pessoa juridica: ");
+                                int idPessoaJuridica = scanner.nextInt();
+
+                                PessoaJuridica pessoaJuridicaObtida = pessoaJuridicaRepo.obter(idPessoaJuridica);
+
+                                if (pessoaJuridicaObtida != null) {
+                                    pessoaJuridicaObtida.exibir();
+
+                                    pessoaJuridicaRepo.excluir(idPessoaJuridica);
+
+                                    System.out.println("Pessoa fìsica excluida com sucesso!");
+                                } else
+                                    System.out.println("Pessoa juridica com este ID não foi encontrada! Tente novamente.");
+                                break;
+
+                            // Opcao invalida
+                            default:
+                                System.out.println("Opção inválida. Por favor, selecione uma opção válida.");
+                                break;
+                        }
+
+                        // Voltar para o menu principal
+                    } while (!opcaoSelecionada.equalsIgnoreCase("Q"));
+                    break;
+
+                // BUSCAR PESSOA PELO ID
+                case "4":
+                    do {
+                        System.out.println("==============================");
+                        System.out.println("F - Obter dados da Pessoa física por ID");
+                        System.out.println("J - Obter dados da pessoa juridica por ID");
+                        System.out.println("Q - Voltar ao Menu Principal");
+                        System.out.println("==============================");
+
+                        opcaoSelecionada = scanner.next();
+                        scanner.nextLine();
+
+                        switch (opcaoSelecionada.toUpperCase()) {
+
+                            // Buscando pessoa fisica pelo id
+                            case "F":
+                                System.out.println("Insira o ID da pessoa física: ");
+                                int idPessoaFisica = scanner.nextInt();
+
+                                PessoaFisica pessoaFisicaObtida = pessoaFisicaRepo.obter(idPessoaFisica);
+
+                                if (pessoaFisicaObtida != null) {
+                                    System.out.println("Pessoa fìsica encontrada!");
+
+                                    pessoaFisicaObtida.exibir();
+                                } else
+                                    System.out.println("Pessoa física com este ID não foi encontrada! Tente novamente.");
+                                break;
+
+                            // Buscandi pessoa juridica pelo id
+                            case "J":
+                                System.out.println("Insira o ID da pessoa juridica: ");
+                                int idPessoaJuridica = scanner.nextInt();
+
+                                PessoaJuridica pessoaJuridicaObtida = pessoaJuridicaRepo.obter(idPessoaJuridica);
+
+                                if (pessoaJuridicaObtida != null) {
+                                    System.out.println("Pessoa juridica encontrada!");
+
+                                    pessoaJuridicaObtida.exibir();
+                                } else
+                                    System.out.println("Pessoa juridica com este ID não foi encontrada! Tente novamente.");
+                                break;
+
+                            // Opcao invalida
+                            default:
+                                System.out.println("Opção inválida. Por favor, selecione uma opção válida.");
+                                break;
+                        }
+
+                        // Voltar para o menu principal
+                    } while (!opcaoSelecionada.equalsIgnoreCase("Q"));
+                    break;
+
+                //BUSCAR TODAS AS PESSOAS
+                case "5":
+                    do {
+                        System.out.println("==============================");
+                        System.out.println("F - Obter lista de Pessoas Físicas");
+                        System.out.println("J - Obter lista de Pessoas Jurídicas");
+                        System.out.println("Q - Voltar ao Menu Principal");
+                        System.out.println("==============================");
+
+                        opcaoSelecionada = scanner.next();
+                        scanner.nextLine();
+
+                        switch (opcaoSelecionada.toUpperCase()) {
+
+                            // Buscar todas as pessoa fisicas
+                            case "F":
+                                System.out.println("Lista de pessoas fìsicas: ");
+                                pessoaFisicaRepo.obterTodos()
+                                        .forEach(pessoaFisica -> {
+                                            pessoaFisica.exibir();
+                                            System.out.println();
+                                        });
+                                break;
+
+                            // Buscar todas as pessoas juridicas
+                            case "J":
+                                System.out.println("Lista de pessoas juridicas: ");
+                                pessoaJuridicaRepo.obterTodos()
+                                        .forEach(pessoaJuridica -> {
+                                            pessoaJuridica.exibir();
+                                            System.out.println();
+                                        });
+                                break;
+
+                            // Opcao invalida
+                            default:
+                                System.out.println("Opção inválida. Por favor, selecione uma opção válida.");
+                                break;
+                        }
+
+                        // Voltar para o menu principal
+                    } while (!opcaoSelecionada.equalsIgnoreCase("Q"));
+                    break;
+
+                // PERSISTIR OS DADOS
+                case "6":
+                    try {
+                        pessoaFisicaRepo.persistir("pessoas_fisicas.dat");
+                        pessoaJuridicaRepo.persistir("pessoas_juridicas.dat");
+                    } catch (IOException erro) {
+                        System.out.println("Erro ao persistir ou recuperar os dados: " + erro.getMessage());
+                    }
+                    break;
+
+                //RECUPERAR OS DADOS
+                case "7":
+                    try {
+                        pessoaFisicaRepo.recuperar("pessoas_fisicas.dat");
+                        pessoaJuridicaRepo.recuperar("pessoas_juridicas.dat");
+                    } catch (ClassNotFoundException | IOException erro) {
+                        System.out.println("Erro ao persistir ou recuperar os dados: " + erro.getMessage());
+                    }
+                    break;
+
+                // Opcao invalida
+                default:
+                    System.out.println("Opção inválida. Por favor, selecione uma opção válida.");
+                    break;
+            }
+
+            // Fechar a aplicacao
+        } while (!opcaoSelecionada.equals("0"));
+
+        scanner.close();
     }
 }
 ```
 
-###
-
-- Resultado da execução do código.
+- Resultado da execução do códodigo
 
 ```
-Dados da pessoa física armazenados.
-
+==============================
+1 - Incluir Pessoa
+2 - Alterar Pessoa
+3 - Excluir Pessoa
+4 - Buscar pelo Id
+5 - Exibir Todos
+6 - Persistir Dados
+7 - Recuperar Dados
+0 - Finalizar Programa
+==============================
+7
 Dados da pessoa física recuperados.
-
-ID: 1
-Nome: John
-CPF: 11111111111
-Idade: 30
-
-ID: 2
-Nome: Mary
-CPF: 22222222222
-Idade: 25
-
-Dados da pessoa jurídica armazenados.
 
 Dados da pessoa jurídica recuperados.
 
+==============================
+1 - Incluir Pessoa
+2 - Alterar Pessoa
+3 - Excluir Pessoa
+4 - Buscar pelo Id
+5 - Exibir Todos
+6 - Persistir Dados
+7 - Recuperar Dados
+0 - Finalizar Programa
+==============================
+1
+==============================
+F - Incluir Pessoa Física
+J - Incluir Pessoa Jurídica
+Q - Voltar ao Menu Principal
+==============================
+f
+Insira o nome da pessoa física: 
+Fernando Rocha
+Insira o cpf da pessoa física: 
+12312312312
+Insira a idade da pessoa física: 
+31
+Pessoa física inserida com sucesso!
+ID: 2
+Nome: Fernando Rocha
+CPF: 12312312312
+Idade: 31
+==============================
+F - Incluir Pessoa Física
+J - Incluir Pessoa Jurídica
+Q - Voltar ao Menu Principal
+==============================
+q
+Opção inválida. Por favor, selecione uma opção válida.
+==============================
+1 - Incluir Pessoa
+2 - Alterar Pessoa
+3 - Excluir Pessoa
+4 - Buscar pelo Id
+5 - Exibir Todos
+6 - Persistir Dados
+7 - Recuperar Dados
+0 - Finalizar Programa
+==============================
+6
+Dados da pessoa física armazenados.
+
+Dados da pessoa jurídica armazenados.
+
+==============================
+1 - Incluir Pessoa
+2 - Alterar Pessoa
+3 - Excluir Pessoa
+4 - Buscar pelo Id
+5 - Exibir Todos
+6 - Persistir Dados
+7 - Recuperar Dados
+0 - Finalizar Programa
+==============================
+5
+==============================
+F - Obter lista de Pessoas Físicas
+J - Obter lista de Pessoas Jurídicas
+Q - Voltar ao Menu Principal
+==============================
+f
+Lista de pessoas fìsicas: 
 ID: 1
-Nome: X Corp
-CNPJ: 1231231230
+Nome: Fernando Rocha
+CPF: 12312312312
+Idade: 31
 
 ID: 2
-Nome: Acme LTDA
-CNPJ: 4564564560
+Nome: Fernando Rocha
+CPF: 12312312312
+Idade: 31
 
+==============================
+F - Obter lista de Pessoas Físicas
+J - Obter lista de Pessoas Jurídicas
+Q - Voltar ao Menu Principal
+==============================
+q
+Opção inválida. Por favor, selecione uma opção válida.
+==============================
+1 - Incluir Pessoa
+2 - Alterar Pessoa
+3 - Excluir Pessoa
+4 - Buscar pelo Id
+5 - Exibir Todos
+6 - Persistir Dados
+7 - Recuperar Dados
+0 - Finalizar Programa
+==============================
+3
+==============================
+F - Excluir pessoa física por ID
+J - Excluir pessoa juridica por ID
+Q - Voltar ao Menu Principal
+==============================
+f
+Insira o ID da pessoa física: 
+2
+ID: 2
+Nome: Fernando Rocha
+CPF: 12312312312
+Idade: 31
+Pessoa fìsica excluida com sucesso!
+==============================
+F - Excluir pessoa física por ID
+J - Excluir pessoa juridica por ID
+Q - Voltar ao Menu Principal
+==============================
+q
+Opção inválida. Por favor, selecione uma opção válida.
+==============================
+1 - Incluir Pessoa
+2 - Alterar Pessoa
+3 - Excluir Pessoa
+4 - Buscar pelo Id
+5 - Exibir Todos
+6 - Persistir Dados
+7 - Recuperar Dados
+0 - Finalizar Programa
+==============================
+5
+==============================
+F - Obter lista de Pessoas Físicas
+J - Obter lista de Pessoas Jurídicas
+Q - Voltar ao Menu Principal
+==============================
+f
+Lista de pessoas fìsicas: 
+ID: 1
+Nome: Fernando Rocha
+CPF: 12312312312
+Idade: 31
 
-Process finished with exit code 0
+==============================
+F - Obter lista de Pessoas Físicas
+J - Obter lista de Pessoas Jurídicas
+Q - Voltar ao Menu Principal
+==============================
+q
+Opção inválida. Por favor, selecione uma opção válida.
+==============================
+1 - Incluir Pessoa
+2 - Alterar Pessoa
+3 - Excluir Pessoa
+4 - Buscar pelo Id
+5 - Exibir Todos
+6 - Persistir Dados
+7 - Recuperar Dados
+0 - Finalizar Programa
+==============================
+
 ```
 
 ##
@@ -399,41 +600,25 @@ Process finished with exit code 0
 
 ###
 
-#### 1. Quais as vantagens e desvantagens do uso de herança?
+#### 1. O que são elementos estáticos e qual o motivo para o método main adotar esse modificador?
 
-A herança tem como principal objetivo reutilizar funcionalidades de outros elementos da aplicação por meio da extensão
-de atributos e métodos de uma classe.
-
-A vantagem da herança é a possibilidade de se definir novos atributos e métodos para a classe, além dos atributos e
-métodos que essa classe está herdando.
-
-A desvantagem de se utilizar a herança é enfraquecer o conceito de encapsulamento que é importante no paradigma de
-orientação a objeto. Além disso, torna a subclasse dependente da implementação da classe superior, tornando o código
-mais difícil de se manter, pois mudanças na classe superior pode afetar todas as classes que herdam dela.
+Os elementos estáticos em Java pertencem à classe em si e não a uma instância específica da classe. O método main é
+declarado como estático porque ele precisa ser chamado diretamente pela JVM (Java Virtual Machine) sem a necessidade de
+criar um objeto da classe que contém o método. Essa abordagem permite que o método main seja o ponto de entrada do
+programa Java, permitindo que ele seja executado sem a necessidade de instanciar a classe.
 
 ###
 
-#### 2. Por que a interface Serializable é necessária ao efetuar persistência em arquivos binários?
+#### 2. Para que serve a classe Scanner?
 
-Essa interface permite que os objetos sejam serializados, ou seja, convertidos em uma sequência de bytes e
-desserializados com a conversão de volta à um objeto.
-
-A vantagem de se usar arquivos binários é que eles ocupam menos espaço e podem ser escritos e lidos mais rapidamente que
-um arquivo de texto normal. Além disso, podem preservar o tipo e a estrutura dos dados.
+A classe Scanner em Java é utilizada para ler entradas do usuário a partir do teclado. Ela fornece métodos para ler
+diferentes tipos de dados, como inteiros, números de ponto flutuante, strings, entre outros.
 
 ###
 
-#### 3. Como o paradigma funcional é utilizado pela API stream no Java?
+#### 3. Como o uso de classes de repositório impactou na organização do código?
 
-A API Stream do Java permite a execução de operações em sequência de forma declarativa usando o paradigma funcional. É
-possível especificar o que fazer com os elementos da sequência e criar um encadeamento de processamento de dados não
-modificam a fonte dos dados original.
-
-###
-
-#### 4. Quando trabalhamos com Java, qual padrão de desenvolvimento é adotado na persistência de dados em arquivos?
-
-O padrão adotado nesse projeto foi com o uso da classe ObjectOutputStream para escrever objetos em um arquivo binário e
-a classe ObjectInputStream para ler os objetos de um arquivo binário.
-
-Além disso é possível persistir dados por meio de arquivos de texto simples, CSV, XML, JSON e outros.
+As classes de repositório permitem isolar a lógica de acesso a dados seguindo o princípio de responsabilidade única,
+onde cada classe tem uma única responsabilidade bem definida. Além disso, a separação da lógica de acesso a dados também
+permite uma melhor reutilização de código, pois outras partes do programa podem utilizar a mesma classe de repositório
+para acessar os dados de forma consistente.
